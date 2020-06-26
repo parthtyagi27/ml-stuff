@@ -20,15 +20,20 @@ print("Init theta 0 = " + str(theta_0))
 print("Init theta 1 = " + str(theta_1))
 
 def cost_function():
-    d_0 = 0
-    d_1 = 0
-    for index, row in dataframe.iterrows():
-        hypothesis = theta_0 * row['hsc_p'] + theta_1
-        d_0 = d_0 + ((hypothesis - row['degree_p']) * row['hsc_p'])
-        d_1 = d_1 + (hypothesis - row['degree_p'])
-    d_0 = d_0 / dataframe.shape[0]
-    d_1 = d_1 / dataframe.shape[0]
-    return (d_0, d_1)
+    # d_0 = 0
+    # d_1 = 0
+    # for index, row in dataframe.iterrows():
+    #     hypothesis = theta_0 * row['hsc_p'] + theta_1
+    #     d_0 = d_0 + ((hypothesis - row['degree_p']) * row['hsc_p'])
+    #     d_1 = d_1 + (hypothesis - row['degree_p'])
+    # d_0 = d_0 / dataframe.shape[0]
+    # d_1 = d_1 / dataframe.shape[0]
+    hs_p = dataframe['hsc_p'].values
+    hypothesis = (theta_0 * hs_p) + theta_1
+    degree_p = dataframe['degree_p'].values
+    d_0 = np.sum((hypothesis - degree_p) * hs_p)
+    d_1 = np.sum((hypothesis - degree_p))
+    return (d_0 / dataframe.shape[0], d_1 / dataframe.shape[0])
 
 steps_per_epoch = 1000
 epochs = 100
@@ -38,17 +43,23 @@ for i in range(epochs):
         d_theta_0, d_theta_1 = cost_function()
         theta_0 = theta_0 - (learning_rate * d_theta_0)
         theta_1 = theta_1 - (learning_rate * d_theta_1)
-    print("d_theta 0 = " + str(d_theta_0))
-    print("d_theta 1 = " + str(d_theta_1))
+    print("theta 0 = " + str(d_theta_0))
+    print("theta 1 = " + str(d_theta_1))
     
 print(theta_0)
 print(theta_1)
 
-# x_bar = dataframe.describe()['hsc_p']['mean']
-# y_bar = dataframe.describe()['degree_p']['mean']
-# x_min = dataframe.describe()['hsc_p']['min']
-# x_max = dataframe.describe()['hsc_p']['max']
+x_bar = dataframe.describe()['hsc_p']['mean']
+y_bar = dataframe.describe()['degree_p']['mean']
+x_min = dataframe.describe()['hsc_p']['min']
+x_max = dataframe.describe()['hsc_p']['max']
 
+x = np.linspace(x_min, x_max)
+y = theta_0 * x + theta_1
+
+plt.scatter(dataframe['hsc_p'], dataframe['degree_p'])
+plt.plot(x, y, color="red")
+plt.show()
 # b_0 = 0
 # b_1_top = 0
 # b_1_bottom = 0
