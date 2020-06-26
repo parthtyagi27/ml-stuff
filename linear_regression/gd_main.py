@@ -11,8 +11,8 @@ main_dataframe = pd.read_csv("placement_data.csv")
 dataframe, test_dataframe = train_test_split(main_dataframe, test_size=0.2)
 print(dataframe.describe())
 
-theta_0 = 0
-theta_1 = 0
+theta_0 = random.random()
+theta_1 = random.random()
 
 learning_rate = 0.0004
 
@@ -20,14 +20,6 @@ print("Init theta 0 = " + str(theta_0))
 print("Init theta 1 = " + str(theta_1))
 
 def cost_function():
-    # d_0 = 0
-    # d_1 = 0
-    # for index, row in dataframe.iterrows():
-    #     hypothesis = theta_0 * row['hsc_p'] + theta_1
-    #     d_0 = d_0 + ((hypothesis - row['degree_p']) * row['hsc_p'])
-    #     d_1 = d_1 + (hypothesis - row['degree_p'])
-    # d_0 = d_0 / dataframe.shape[0]
-    # d_1 = d_1 / dataframe.shape[0]
     hs_p = dataframe['hsc_p'].values
     hypothesis = (theta_0 * hs_p) + theta_1
     degree_p = dataframe['degree_p'].values
@@ -43,8 +35,7 @@ for i in range(epochs):
         d_theta_0, d_theta_1 = cost_function()
         theta_0 = theta_0 - (learning_rate * d_theta_0)
         theta_1 = theta_1 - (learning_rate * d_theta_1)
-    print("theta 0 = " + str(d_theta_0))
-    print("theta 1 = " + str(d_theta_1))
+    print("Epoch {} of {}: theta_0 = {}, theta_1 = {}".format(i, epochs, theta_0, theta_1))
     
 print(theta_0)
 print(theta_1)
@@ -60,21 +51,6 @@ y = theta_0 * x + theta_1
 plt.scatter(dataframe['hsc_p'], dataframe['degree_p'])
 plt.plot(x, y, color="red")
 plt.show()
-# b_0 = 0
-# b_1_top = 0
-# b_1_bottom = 0
-
-# for index, row in dataframe.iterrows():
-#     x_i = row['hsc_p']
-#     y_i = row['degree_p']
-#     b_1_top = b_1_top + ((x_i - x_bar) * (y_i - y_bar))
-#     b_1_bottom = b_1_bottom + ((x_i - x_bar) ** 2)
-
-# b_1 = b_1_top / b_1_bottom
-# b_0 = y_bar - (b_1 * x_bar)
-
-# x = np.linspace(x_min, x_max)
-# y = b_1 * x + b_0
 
 # error = 0
 
@@ -86,8 +62,3 @@ plt.show()
 # error = math.sqrt(error)
 
 # print("Error = " + str(error))
-
-
-# plt.scatter(dataframe['hsc_p'], dataframe['degree_p'])
-# plt.plot(x, y, color="red")
-# plt.show()
